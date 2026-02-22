@@ -14,7 +14,7 @@ export default class RegistrarUsuario
     ) {}
 
     async executar(usuario: Usuario): Promise<void> {        
-        const senhaCripto = this.provedorCripto.criptografar(usuario.senha)
+        const senhaCripto = this.provedorCripto.criptografar(usuario.senha!)
         
         const usuarioExistente = await this.repositorio.buscarPorEmail(usuario.email)
         if(usuarioExistente) throw new Error(Erros.USUARIO_JA_EXISTE)

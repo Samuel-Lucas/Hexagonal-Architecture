@@ -6,6 +6,9 @@ import RepositorioUsuarioPg from './external/db/RepositorioUsuarioPg'
 import UserController from './external/api/UserController'
 import LoginUser from './core/usuario/service/LoginUser'
 import LoginUserController from './external/api/LoginUserController'
+import GetProduct from './core/product/service/GetProduct'
+import GetProductController from './external/api/GetProductController'
+import UserMiddleware from './external/api/UserMiddleware'
 
 dotenv.config()
 
@@ -20,7 +23,7 @@ app.listen(port, () => {
     console.log(`🔥 Servidor executando na porta: ${port}`)
 })
 
-// ---------------------------------------------------- open routes
+//---------------------------------------------------- open routes
 const repositorioUsuario = new RepositorioUsuarioPg()
 const provedorCripto = new SenhaCripto()
 
@@ -29,3 +32,9 @@ const loginUser = new LoginUser(repositorioUsuario, provedorCripto)
 
 new UserController(app, registerUser)
 new LoginUserController(app, loginUser)
+
+//----------------------------------------------------- protected routes
+const userMiddleware = UserMiddleware(repositorioUsuario)
+
+const userRepository = new GetProduct()
+new GetProductController(app, userRepository, userMiddleware)

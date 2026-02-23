@@ -9,4 +9,8 @@ export default class JwtProvider {
             expiresIn: "1d"
         })
     }
+
+    obtain(token: string): string | object {
+        return jwt.verify(token, this.secret)
+    }
 }

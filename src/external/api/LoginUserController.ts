@@ -2,6 +2,8 @@ import LoginUser from '@/core/usuario/service/LoginUser'
 import { Express } from 'express'
 import JwtProvider from './JwtProvider'
 import 'dotenv/config'
+import UserMiddleware from './UserMiddleware'
+import RepositorioUsuario from '@/core/usuario/service/RepositorioUsuario'
 
 export default class LoginUserController {
    
@@ -9,7 +11,8 @@ export default class LoginUserController {
         server: Express,
         useCases: LoginUser
     ) {
-        server.post('/api/users/login', async (req, res) => {
+        server.post('/api/users/login',
+            async (req, res) => {
             try {
                 const user = await useCases.executar({
                     email: req.body.email,

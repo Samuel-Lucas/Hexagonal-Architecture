@@ -1,5 +1,7 @@
-import LoginUser from '@/core/usuario/service/LoginUser';
+import LoginUser from '@/core/usuario/service/LoginUser'
 import { Express } from 'express'
+import JwtProvider from './JwtProvider'
+import 'dotenv/config'
 
 export default class LoginUserController {
    
@@ -9,12 +11,17 @@ export default class LoginUserController {
     ) {
         server.post('/api/users/login', async (req, res) => {
             try {
-                const response = await useCases.executar({
+                const user = await useCases.executar({
                     email: req.body.email,
                     senha: req.body.senha
                 })
 
-                res.status(200).send(response)
+                const provider = new JwtProvider(process.env.JWT_SECRET!)
+
+                res.status(200).send({
+                    user,
+                    token: provider.generate(user)
+                })
             } catch(error: any) {
                 res.status(400).send(error.message)
             }
